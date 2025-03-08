@@ -12,7 +12,7 @@ external = np.array([
 
 internal = np.logical_not(external)
 
-collide = np.array([
+crossed = np.array([
  [[0, 1],[1, 0]],
  [[1, 0], [0, 1]]
 ])
@@ -28,18 +28,18 @@ def match(sub, masks):
 
 def count_object(image):
  E = 0
- I = 0
- C = 0
+
  for y in range(0, image.shape[0]-1):
    for x in range(1, image.shape[1]-1):
      sub = image[y:y+2, x:x+2]
      if match(sub, external):
        E += 1
      elif match(sub, internal):
-       I += 1
-     elif match(sub, collide):
-       C += 1
- return (E - I) / 4 + (C / 2)
+       E -= 1
+     elif match(sub, crossed):
+       E += 2
+ return E/4
+
 
 image = np.load("example2.npy")
 image[image != 0] = 1
