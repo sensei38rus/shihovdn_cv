@@ -65,11 +65,7 @@ def recognize(region):
                    return "X"
                else:
                    return "W"
-            #    match np.max(labeled):
-            #        case 2: return "/"
-            #        case 4: return "X"
-            #        case _:return "W"
-    return "#"
+      
 symbols = plt.imread(Path(__file__).parent / "symbols.png")
 gray = symbols[:, :, :-1].mean(axis = 2)
 binary = gray > 0
