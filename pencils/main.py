@@ -1,50 +1,29 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from skimage.filters import sobel, threshold_otsu
 from skimage.measure import label, regionprops
-from skimage.morphology import binary_closing, binary_dilation
-from collections import defaultdict
+import cv2
 
 
-def analyze_pencils(images):
-    total_count = 0
-    
-    for idx, img_path in enumerate(images, 1):
-        image = plt.imread(img_path).mean(axis = 2)
-        s = sobel(image)
 
-        thresh = threshold_otsu(s)/2
-        s[s < thresh] = 0
-        s[s >= thresh] = 1
-        
-      
-        
-        for _ in range(5):
-            s = binary_dilation(s)
-        
-       
-        labeled_components = label(s)
-        regions = regionprops(labeled_components)
-        
-       
-        current_count = sum(
-            1 for obj in regions
-            if 0.997 < obj.eccentricity < 0.9985 
-            and obj.convex_area > 20000
-        )
-        
-       
-        total_count += current_count
-        
-        print(f"На изображении {idx} обнаружено карандашей: {current_count}")
-    
-    return  total_count
+kernel = np.ones((7, 7), np.uint8) 
+count_all = 0
 
+for i in range(1, 13):
+    image = cv2.imread(f"./images/img ({i}).jpg", cv2.IMREAD_GRAYSCALE)
+    binary = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)[1]
+    binary = cv2.bitwise_not(binary)
+    binary = cv2.dilate(binary, kernel, iterations=3)
+    labeled = label(binary)
+    regions = regionprops(labeled)
+    count = 0
+    for region in regions:
+        if region.eccentricity > 0.99 and region.perimeter > 5000 and region.perimeter < 6700:
+            count +=1
+    print(f"На {i} изображении {count} карандашей")
+    count_all += count
+print(f"Всего карандашей на всех изображениях: {count_all}")
 
-image_collection = [f'./images/img ({i}).jpg' for i in range(1, 13)]
-    
-total = analyze_pencils(image_collection)
+plt.imshow(binary)
+plt.show()
 
-    
-print(f"\nСумма карандашей: {total}")
 
