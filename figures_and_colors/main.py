@@ -5,7 +5,7 @@ from skimage.color import rgb2hsv
 from collections import defaultdict
 
 
-
+a = 1
 def divide_shades(color_counts):
     sorted_items = sorted(color_counts.items())
     pairs = [[hue, count] for hue, count in sorted_items]
