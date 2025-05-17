@@ -27,10 +27,9 @@ while True:
             mon1 = {'top': top, 'left': left, 'width': w, 'height':h}
             i = 1
            
-    # cv2.imshow('Cactus Detection', img)
-    # cv2.waitKey(1)
+   
     if keyboard.is_pressed('q'):
         break
 
 
-# cv2.destroyAllWindows()
+
