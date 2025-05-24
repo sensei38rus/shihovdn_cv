@@ -84,22 +84,40 @@ def draw_game_info(frame):
                    (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, text_color, 2)
 
 def detect_square_sequence(subsequence):
-    
     if len(subsequence) < 4:
         return []
+
+   
+    sorted_balls = sorted(subsequence.items(), key=lambda x: x[1][1]) 
+
+    #средняя  вертикальная координата
+    mid_y = (sorted_balls[0][1][1] + sorted_balls[-1][1][1]) / 2  
+    upper = []
+    lower = []
     
-    # Сортировка и разделение на верхние/нижние шары
-    sorted_balls = sorted(subsequence.items(), key=lambda x: x[1][1])
-    upper = sorted_balls[:2]
-    lower = sorted_balls[2:4]
+    for ball in sorted_balls:
+        if ball[1][1] < mid_y:  
+            upper.append(ball)
+        else:  
+            lower.append(ball)
+
     
-    # Сортировка по X координате
-    upper_sorted = sorted(upper, key=lambda x: x[1][0])
-    lower_sorted = sorted(lower, key=lambda x: x[1][0])
+    if len(upper) < 2 or len(lower) < 2:
+        upper = sorted_balls[:2]
+        lower = sorted_balls[2:4]
+
     
-    # Формирование последовательности
-    return [upper_sorted[0][0], upper_sorted[1][0], 
-            lower_sorted[0][0], lower_sorted[1][0]]
+    upper_sorted = sorted(upper, key=lambda x: x[1][0])  
+    lower_sorted = sorted(lower, key=lambda x: x[1][0])  
+
+  
+    return [
+        upper_sorted[0][0],  
+        upper_sorted[1][0], 
+        lower_sorted[0][0], 
+        lower_sorted[1][0]   
+    ]
+
 
 
 while capture.isOpened():
