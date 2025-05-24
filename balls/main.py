@@ -43,7 +43,7 @@ cv2.namedWindow("Mask", cv2.WINDOW_NORMAL)
 file_name = "settings.json"
 base_colors = json.load(open(file_name, "r")) if os.path.exists(file_name) else {}
 
-# Игровые переменные
+
 game_state = "setup"  
 target_sequence = []
 user_sequence = []
@@ -53,7 +53,7 @@ def generate_target_sequence():
     if len(base_colors) < 4:
         return []
     
-    # Создаем копию ключей и перемешиваем
+   
     colors = list(base_colors.keys())
     random.shuffle(colors)
     
@@ -101,7 +101,7 @@ def detect_square_sequence(subsequence):
     return [upper_sorted[0][0], upper_sorted[1][0], 
             lower_sorted[0][0], lower_sorted[1][0]]
 
-# Основной игровой цикл
+
 while capture.isOpened():
     ret, frame = capture.read()
     if not ret:
@@ -144,5 +144,6 @@ while capture.isOpened():
     draw_game_info(frame)
     cv2.imshow("Camera", frame)
 
-# Завершение работыcapture.release()
+
+capture.release()
 cv2.destroyAllWindows()
